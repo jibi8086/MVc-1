@@ -1,0 +1,881 @@
+html page
+
+<div class="paginationmaindiv" id="divPageCTasks" style="display:none;">
+                    <div class="paginationsubdiv">
+                        <div class="paginationbtndiv" id="FRSTbtnCTasks" title="First">
+                            <a href="#" class="hreflink"><div class="paginationfirstbtn"><i class="fa fa-angle-double-left" aria-hidden="true"></i></div></a>
+                        </div>
+                        <div class="paginationbtndiv" id="PRVbtnCTasks" title="Previous">
+                            <a href="#" class="hreflink"><div class="paginationPRVbtn"><i class="fa fa-angle-left" aria-hidden="true"></i></div></a>
+                        </div>
+                        <div class="paginationbtndiv paginationbtndivComNum" id="divPgfirstCTasks">
+                            <a href="#" class="hreflink"><div name="1" class="paginationNUMbtn paginationNUMCompbtn paginationNUM-ACTVbtnComp  pagination pgNumberB1">1</div></a>
+                        </div>
+                        <div class="paginationbtndiv paginationbtndivComNum">
+                            <a href="#" class="hreflink"><div name="2" class="paginationNUMbtn paginationNUMCompbtn pagination pgNumberB2">2</div></a>
+                        </div>
+                        <div class="paginationbtndiv paginationbtndivComNum">
+                            <a href="#" class="hreflink"><div name="3" class="paginationNUMbtn paginationNUMCompbtn pagination pgNumberB3">3</div></a>
+                        </div>
+                        <div class="paginationbtndiv paginationbtndivComNum">
+                            <a href="#" class="hreflink"><div name="4" class="paginationNUMbtn paginationNUMCompbtn pagination pgNumberB4">4</div></a>
+                        </div>
+                        <div class="paginationbtndiv paginationbtndivComNum" id="divPglastCTasks">
+                            <a href="#" class="hreflink"><div name="5" class="paginationNUMbtn paginationNUMCompbtn pagination pgNumberB5">5</div></a>
+                        </div>
+                        <div class="paginationbtndiv" id="NXTbtnCTasks" title="Next">
+                            <a href="#" class="hreflink"><div class="paginationNXTbtn"><i class="fa fa-angle-right" aria-hidden="true"></i></div></a>
+                        </div>
+                        <div class="paginationbtndiv" id="LSTbtnCTasks" title="Last">
+                            <a href="#" class="hreflink"><div class="paginationPRVbtn"><i class="fa fa-angle-double-right" aria-hidden="true"></i></div></a>
+                        </div>
+                    </div>
+                </div>
+
+
+in common script
+
+//pagination function
+function disableButtons(LastButton, NextButton, FirstButton, PreviousButton, PageCount, CurrentPageId) {
+    if (CurrentPageId == PageCount) {
+        LastButton.css('pointer-events', 'none');
+        NextButton.css('pointer-events', 'none');
+    }
+    else {
+        LastButton.css('pointer-events', 'visible');
+        NextButton.css('pointer-events', 'visible');
+    }
+    if (CurrentPageId == 1) {
+        FirstButton.css('pointer-events', 'none');
+        PreviousButton.css('pointer-events', 'none');
+    }
+    else {
+        FirstButton.css('pointer-events', 'visible');
+        PreviousButton.css('pointer-events', 'visible');
+    }
+}
+function hidePages(PaginationDivId, ActiveClassName, PageNum) {
+    PaginationDivId.each(function () {
+        $(ActiveClassName + PageNum).hide();
+        PageNum = PageNum + 1;
+    });
+}
+function showPages(PaginationDivId, ActiveClassName, PageNum) {
+    PaginationDivId.each(function () {
+        $(ActiveClassName + PageNum).show();
+        PageNum = PageNum + 1;
+    });
+}
+function ShowPreviousPage(Paginationbtn, ClassName, ActiveClass, ActiveClassTwodgt, ActiveClassThreedgt) {
+    if (classId == 5 && loopVal > 5) {
+        AddAndRemoveClass(loopVal - 1, classId, Paginationbtn, $(ClassName + classId),
+            ActiveClass, ActiveClassTwodgt, ActiveClassThreedgt);
+        loopVal = loopVal - 5;
+        Paginationbtn.each(function () {
+            $(this).text(loopVal);
+            loopVal = loopVal + 1;
+        });
+    }
+    else
+        AddAndRemoveClass(loopVal, (classId - 1), Paginationbtn, $(ClassName + (classId - 1)),
+            ActiveClass, ActiveClassTwodgt, ActiveClassThreedgt);
+}
+function getLoopValAndClassId(ActiveClassName, ActiveClassNameTwodgt, ActiveClassNameThreeDgt) {
+    if (ActiveClassName.length != 0 && ActiveClassNameTwodgt.length == 0 && ActiveClassNameThreeDgt.length == 0) {
+        classId = parseInt(ActiveClassName.attr("name"));
+        loopVal = parseInt(ActiveClassName.text());
+    }
+    else if (ActiveClassNameTwodgt.length != 0 && ActiveClassName.length == 0 && ActiveClassNameThreeDgt.length == 0) {
+        classId = parseInt(ActiveClassNameTwodgt.attr("name"));
+        loopVal = parseInt(ActiveClassNameTwodgt.text());
+    }
+    else {
+        classId = parseInt(ActiveClassNameThreeDgt.attr("name"));
+        loopVal = parseInt(ActiveClassNameThreeDgt.text());
+    }
+}
+function FirstButonClick(btnClass, paginationNumClass, ActiveClassName, CurrentPageId, ActiveCLassTwodgt, ActiveClassThreedgt) {
+    loopVal = CurrentPageId;
+    btnClass.each(function () {
+        $(this).text(loopVal);
+        loopVal = loopVal + 1;
+    });
+    AddAndRemoveClass(1, 1, btnClass, paginationNumClass, ActiveClassName, ActiveCLassTwodgt, ActiveClassThreedgt)
+}
+function LastButtonClick(btnClass, paginationNumClass, LastPageId, ActiveClassName, CurrentPageId, ActiveCLassTwodgt, ActiveClassThreedgt) {
+    if (CurrentPageId > 5) {
+        loopVal = CurrentPageId - 4;
+        btnClass.each(function () {
+            if (CurrentPageId >= loopVal) {
+                $(this).text(loopVal);
+                loopVal = loopVal + 1;
+            }
+        });
+        AddAndRemoveClass(CurrentPageId, 5, btnClass, paginationNumClass, ActiveClassName, ActiveCLassTwodgt, ActiveClassThreedgt);
+    }
+    else {
+        loopVal = CurrentPageId - (CurrentPageId - 1);
+        btnClass.each(function () {
+            if (CurrentPageId >= loopVal) {
+                $(this).text(loopVal);
+                loopVal = loopVal + 1;
+            }
+        });
+        AddAndRemoveClass(CurrentPageId, CurrentPageId, btnClass, LastPageId, ActiveClassName, ActiveCLassTwodgt, ActiveClassThreedgt);
+    }
+}
+function AddAndRemoveClass(loopVal, classId, btnClass, paginationNumClass, ActiveClassName, ActiveClassTwodgt, ActiveClassThreedgt) {
+    if ((loopVal.toString().length == 1)) {
+        btnClass.removeClass(ActiveClassName);
+        btnClass.removeClass(ActiveClassTwodgt);
+        btnClass.removeClass(ActiveClassThreedgt);
+        paginationNumClass.addClass(ActiveClassName);
+    }
+    else if ((loopVal.toString().length == 2)) {
+        btnClass.removeClass(ActiveClassTwodgt);
+        btnClass.removeClass(ActiveClassName);
+        btnClass.removeClass(ActiveClassThreedgt);
+        paginationNumClass.addClass(ActiveClassTwodgt);
+    }
+    else {
+        btnClass.removeClass(ActiveClassTwodgt);
+        btnClass.removeClass(ActiveClassName);
+        btnClass.removeClass(ActiveClassThreedgt);
+        paginationNumClass.addClass(ActiveClassThreedgt);
+    }
+}
+function NextButtonClick(btnClass, paginationNumClass, LastPageId, ActiveClassName, pageCount, ActiveClassTwodgt, ActiveClassThreedgt) {
+    var currentText = loopVal;
+    if (loopVal >= 4 && classId == 4 && (loopVal + 1) < pageCount) {
+        loopVal = loopVal - 2;
+        btnClass.each(function () {
+            $(this).text(loopVal);
+            loopVal = loopVal + 1;
+        });
+        AddAndRemoveClass(currentText + 1, classId, btnClass, paginationNumClass, ActiveClassName, ActiveClassTwodgt, ActiveClassThreedgt)
+    }
+    else
+        AddAndRemoveClass(currentText + 1, classId + 1, btnClass, LastPageId, ActiveClassName, ActiveClassTwodgt, ActiveClassThreedgt)
+}
+function prevButtonClick(btnClass, paginationNumClass, LastPageId, ActiveClassName, ActiveClassTwodgt, ActiveClassThreedgt, CurrentPageId) {
+    var currentText = loopVal;
+    if ((classId == 5 || classId > 2 || loopVal == 2) && loopVal >= classId) {
+        AddAndRemoveClass(currentText - 1, classId - 1, btnClass, paginationNumClass, ActiveClassName, ActiveClassTwodgt, ActiveClassThreedgt)
+    }
+    else if (classId == 2 && loopVal >= classId) {
+        loopVal = loopVal - classId;
+        btnClass.each(function () {
+            $(this).text(loopVal);
+            loopVal = loopVal + 1;
+        });
+        AddAndRemoveClass(currentText - 1, classId, btnClass, LastPageId, ActiveClassName, ActiveClassTwodgt, ActiveClassThreedgt)
+    }
+    else
+        AddAndRemoveClass(currentText - 1, classId - 1, btnClass, paginationNumClass, ActiveClassName, ActiveClassTwodgt, ActiveClassThreedgt)
+}
+function showAndHidePages(PageCount, PageId, paginationBtndiv, className) {
+    if (PageCount <= 5) {
+        loopVal = 1;
+        if (loopVal <= PageCount && PageId <= PageCount) {
+            showPages(paginationBtndiv, className, loopVal);
+        }
+        hidePages(paginationBtndiv, className, (PageCount + 1));
+    }
+    else {
+        showPages(paginationBtndiv, className, loopVal);
+    }
+}
+function LoadEachButton(PaginationBtnName, PaginationBtnClass, ActivaClassSingleDgt, ActiveClassTwoDgt, ActiveClassThreeDgt, PageCount) {
+    if (classId == 1) {
+        if (loopVal == 1) {
+            AddAndRemoveClass(loopVal, classId, PaginationBtnName, $(PaginationBtnClass + classId), ActivaClassSingleDgt,
+             ActiveClassTwoDgt, ActiveClassThreeDgt);
+        }
+        else {
+            AddAndRemoveClass(loopVal, classId + 1, PaginationBtnName, $(PaginationBtnClass + (classId + 1)), ActivaClassSingleDgt,
+             ActiveClassTwoDgt, ActiveClassThreeDgt);
+        }
+        loopVal = loopVal - 1;
+        PaginationBtnName.each(function () {
+            if (loopVal > 0) {
+                $(this).text(loopVal);
+                loopVal = loopVal + 1;
+            }
+        });
+    }
+    else if (classId == 5) {
+        if (loopVal == PageCount) {
+            AddAndRemoveClass(loopVal, classId, PaginationBtnName, $(PaginationBtnClass + classId), ActivaClassSingleDgt,
+             ActiveClassTwoDgt, ActiveClassThreeDgt);
+        }
+        else {
+            AddAndRemoveClass(loopVal, classId - 1, PaginationBtnName, $(PaginationBtnClass + (classId - 1)), ActivaClassSingleDgt,
+             ActiveClassTwoDgt, ActiveClassThreeDgt);
+        }
+        if (loopVal != PageCount) {
+            loopVal = loopVal - 3;
+            PaginationBtnName.each(function () {
+                if (loopVal <= PageCount) {
+                    $(this).text(loopVal);
+                    loopVal = loopVal + 1;
+                }
+            });
+        }
+    }
+    else {
+        AddAndRemoveClass(loopVal, classId, PaginationBtnName, $(PaginationBtnClass + classId), ActivaClassSingleDgt,
+         ActiveClassTwoDgt, ActiveClassThreeDgt);
+    }
+}
+
+
+in cshtml
+
+<script>
+ var CurrentPageIdCompleted = 1;
+    var CurrentPageId = 1;
+    var RowCount = 3;
+    var OffsetVal = 0;
+    var ClassName = "";
+    var OffsetVal = 0;
+    var loopVal = 0;
+    var classId = 0;
+    var PageCountOpen = 0;
+    var PageCountEmailAlert = 0;
+ $(document).ready(function () {
+        loadEmailAlert();
+        //*pagination *//
+        $("#NXTbtnCTasks").click(function () {
+                CurrentPageIdCompleted = CurrentPageIdCompleted + 1;
+                getLoopValAndClassId($('.paginationNUM-ACTVbtnComp'), $('.paginationNUMMOREtxt-ActiveComp'), $('.paginationNUMMOREtxt1-ActiveComp'));
+                NextButtonClick($('.paginationNUMCompbtn'), $('.pgNumberB' + classId), $('.pgNumberB' + (classId + 1)), 'paginationNUM-ACTVbtnComp', PageCountEmailAlert,
+                'paginationNUMMOREtxt-ActiveComp', 'paginationNUMMOREtxt1-ActiveComp');
+                disableButtons($('#LSTbtnCTasks'), $('#NXTbtnCTasks'), $('#FRSTbtnCTasks'), $('#PRVbtnCTasks'), PageCountEmailAlert, CurrentPageIdCompleted);
+                loadEmailAlert();
+        });
+        $('.paginationbtndivComNum > a').each(function () {
+            $(this).click(function () {
+                classId = parseInt($(this).find('.paginationNUMCompbtn').attr("name"));
+                CurrentPageIdCompleted = parseInt($(this).find('.paginationNUMCompbtn').text());
+                loopVal = parseInt($(this).find('.paginationNUMCompbtn').text());
+                LoadEachButton($('.paginationNUMCompbtn'), '.pgNumberB', 'paginationNUM-ACTVbtnComp', 'paginationNUMMOREtxt-ActiveComp', 'paginationNUMMOREtxt1-ActiveComp', PageCountEmailAlert);
+                loadEmailAlert();
+                disableButtons($('#LSTbtnCTasks'), $('#NXTbtnCTasks'), $('#FRSTbtnCTasks'), $('#PRVbtnCTasks'), PageCountEmailAlert, loopVal);
+            });
+        });
+        $("#PRVbtnCTasks").click(function () {
+
+            CurrentPageIdCompleted = CurrentPageIdCompleted - 1;
+            getLoopValAndClassId($('.paginationNUM-ACTVbtnComp'), $('.paginationNUMMOREtxt-ActiveComp'), $('.paginationNUMMOREtxt1-ActiveComp'));
+            prevButtonClick($('.paginationNUMCompbtn'), $('.pgNumberB' + (classId - 1)), $('.pgNumberB' + classId), 'paginationNUM-ACTVbtnComp',
+            'paginationNUMMOREtxt-ActiveComp', 'paginationNUMMOREtxt1-ActiveComp', CurrentPageIdCompleted);
+            loadEmailAlert();
+        });
+        $("#FRSTbtnCTasks").click(function () {
+            CurrentPageIdCompleted = 1;
+            FirstButonClick($('.paginationNUMCompbtn'), $('.pgNumberB1'), 'paginationNUM-ACTVbtnComp', CurrentPageIdCompleted,
+            'paginationNUMMOREtxt-ActiveComp', 'paginationNUMMOREtxt1-ActiveComp');
+            loadEmailAlert();
+        });
+        $("#LSTbtnCTasks").click(function () {
+            CurrentPageIdCompleted = PageCountEmailAlert;
+            LastButtonClick($('.paginationNUMCompbtn'), $('.pgNumberB5'), $('.pgNumberB' + CurrentPageIdCompleted), 'paginationNUM-ACTVbtnComp',
+             CurrentPageIdCompleted, 'paginationNUMMOREtxt-ActiveComp', 'paginationNUMMOREtxt1-ActiveComp');
+            loadEmailAlert();
+        });
+        //*pagination ends*//
+      
+    });
+  function ShowEmailAlertList(emailAlertList) {
+        $("#tblEmailAlert").find("tr:not(:first)").remove();
+        var swapRowStyle = true;
+        var ePIsActive = 0;
+        var activeInactiveClass = "";
+        var activeInactiveTickClass = "";
+        for (i = 0; i < emailAlertList.length; i++) {
+            ePIsActive = emailAlertList[i].EPIsActive;
+            if (ePIsActive) {
+                activeInactiveClass = "gridrow1schedule";
+                activeInactiveTickClass = "fa-check";
+
+            }
+            else {
+                activeInactiveClass = "gridrow1nonschedule";
+                activeInactiveTickClass = "fa-times";
+            }
+            if (swapRowStyle) {
+                $('#tblEmailAlert').append("<tr><td class='gridrow1'><a href='#' onclick='LoadEmailAlert(" + emailAlertList[i].ID_EmployeePackages + "," + emailAlertList[i].FK_Employee + "," + emailAlertList[i].FK_RunID + ",\"" + emailAlertList[i].EmpEmail + "\"," + emailAlertList[i].EPIsActive + ");'>" + emailAlertList[i].Run_Name + "</a></td><td class='gridrow1'>" + emailAlertList[i].EmpName + "</td><td class='gridrow1email'>" + emailAlertList[i].EmpEmail + "</td><td class='gridrow1'><div class='" + activeInactiveClass + "'><i class='fas " + activeInactiveTickClass + "'></i></div></td></tr>");
+                swapRowStyle = false;
+
+            }
+            else {
+                $('#tblEmailAlert').append("<tr><td class='gridrow2'><a href='#' onclick='LoadEmailAlert(" + emailAlertList[i].ID_EmployeePackages + "," + emailAlertList[i].FK_Employee + "," + emailAlertList[i].FK_RunID + ",\"" + emailAlertList[i].EmpEmail + "\"," + emailAlertList[i].EPIsActive + ");'>" + emailAlertList[i].Run_Name + "</a></td><td class='gridrow2'>" + emailAlertList[i].EmpName + "</td><td class='gridrow2email'>" + emailAlertList[i].EmpEmail + "</td><td class='gridrow2'><div class='" + activeInactiveClass + "'><i class='fas " + activeInactiveTickClass + "'></i></div></td></tr>");
+                swapRowStyle = true;
+            }
+        }
+        $('#divPageCTasks').show();
+
+    }
+function loadEmailAlert() {
+        OffsetVal = ((CurrentPageIdCompleted - 1) * RowCount);
+        $.ajax({
+            type: "POST",
+            url: "/Admin/EmailAlertFirstLoad",
+            data: { OffSet: OffsetVal, RowCount: RowCount },
+            success: function (response) {
+               
+                if (response.flag == false) {
+                    $('#divPageCTasks').hide();
+                    $('#packageValidateMsg').text("");
+                }
+                else {
+                    var emailAlertList = $.parseJSON(response.emailAlertList);
+                    if (emailAlertList[0]["TotalRowCount"] % 3 == 0)
+                        PageCountEmailAlert = emailAlertList[0]["TotalRowCount"] / 3;
+                    else
+                    PageCountEmailAlert = Math.floor(emailAlertList[0]["TotalRowCount"] / 3) + 1;
+                    disableButtons($('#LSTbtnCTasks'), $('#NXTbtnCTasks'), $('#FRSTbtnCTasks'), $('#PRVbtnCTasks'), PageCountEmailAlert, CurrentPageIdCompleted);
+                    showAndHidePages(PageCountEmailAlert, CurrentPageIdCompleted, $('.paginationbtndivComNum > a'), '.pgNumberB');
+                    ShowEmailAlertList(emailAlertList);
+                }
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+            }
+        });
+    }
+</script>
+
+
+in procedure
+
+ALTER PROCEDURE [dbo].[UspEmployeePackagesselect]
+	 @Offset int = 0,
+   @RowCount int = 300
+AS
+BEGIN
+ if @RowCount = 0 --To get all records to be loaded in checkboxes in primary load
+            begin
+                select @RowCount = count(1)  FROM [dbo].[EmployeePackages] inner join
+	dbo.Employee on dbo.Employee.ID_Employee=dbo.EmployeePackages.FK_Employee inner join
+	dbo.Run_Master on dbo.Run_Master.Run_Id=dbo.EmployeePackages.FK_RunID where dbo.Employee.EmpISAdmin!=1 and EPIsDelete=0 
+            end
+	SELECT COUNT(*) OVER() as TotalRowCount,ID_EmployeePackages, FK_Employee, FK_RunID, EPIsActive,dbo.Employee.EmpName,dbo.Employee.EmpEmail,
+	dbo.Run_Master.Run_Name FROM [dbo].[EmployeePackages] inner join
+	dbo.Employee on dbo.Employee.ID_Employee=dbo.EmployeePackages.FK_Employee inner join
+	dbo.Run_Master on dbo.Run_Master.Run_Id=dbo.EmployeePackages.FK_RunID where dbo.Employee.EmpISAdmin!=1 and EPIsDelete=0  order by dbo.EmployeePackages.EnteredOn
+	OFFSET @Offset ROWS
+            FETCH NEXT @RowCount ROWS ONLY
+
+END
+
+
+in styles
+
+/* Pagination */
+.paginationmaindiv {
+    background-color: #14262e;
+    padding: 8px;
+    margin: 0;
+    overflow: auto;
+    min-width: 800px;
+}
+
+.paginationsubdiv {
+    padding: 0;
+    margin: auto;
+    max-width: 400px; /*width: 400px; */
+    overflow: auto;
+}
+
+.paginationbtndiv {
+    padding: 0;
+    margin: 0px 5px;
+    float: left;
+}
+
+    .paginationbtndiv a {
+        padding: 0;
+        margin: 0;
+    }
+
+        .paginationbtndiv a:hover .paginationfirstbtn {
+            padding: 0px 0px 0px 6px;
+            margin: 0;
+            background-color: #f3c44e;
+            font-family: 'Lato', sans-serif;
+            font-size: 1.3em;
+            color: #14262e;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+        }
+
+        .paginationbtndiv a:hover .paginationPRVbtn {
+            padding: 0px 0px 0px 9px;
+            margin: 0;
+            background-color: #f3c44e;
+            font-family: 'Lato', sans-serif;
+            font-size: 1.3em;
+            color: #14262e;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+        }
+
+        .paginationbtndiv a:hover .paginationNXTbtn {
+            padding: 0px 0px 0px 10px;
+            margin: 0;
+            background-color: #f3c44e;
+            font-family: 'Lato', sans-serif;
+            font-size: 1.3em;
+            color: #14262e;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+        }
+
+        .paginationbtndiv a:hover .paginationNUMbtn {
+            padding: 2px 0px 0px 8px;
+            margin: 0;
+            background-color: #f3c44e;
+            font-family: 'Lato', sans-serif;
+            font-size: 1em;
+            color: #14262e;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+        /* single digit active hover class */
+        .paginationbtndiv a:hover .paginationNUM-ACTVbtn {
+            padding: 2px 0px 0px 8px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 1em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+        /* two digit active hover class */
+        .paginationbtndiv a:hover .paginationNUMMOREtxt-Active {
+            padding: 4px 0px 0px 5px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUMMOREtxt-ActiveComp {
+            padding: 4px 0px 0px 5px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+        /* three digit active hover class */
+        .paginationbtndiv a:hover .paginationNUMMOREtxt1-Active {
+            padding: 4px 0px 0px 2px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUMMOREtxt1-ActiveComp {
+            padding: 4px 0px 0px 2px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUMMOREtxt {
+            padding: 4px 0px 0px 4px;
+            margin: 0;
+            background-color: #f3c44e;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9em;
+            color: #14262e;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUMMOREtxt1 {
+            padding: 4px 0px 0px 2px;
+            margin: 0;
+            background-color: #f3c44e;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9em;
+            color: #14262e;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUM-ACTVbtnComp {
+            padding: 2px 0px 0px 8px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 1em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUM-ACTVbtnSub {
+            padding: 2px 0px 0px 8px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 1em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUM-ACTVbtnIntrvw {
+            padding: 2px 0px 0px 8px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 1em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .paginationbtndiv a:hover .paginationNUM-ACTVbtnAsst {
+            padding: 2px 0px 0px 8px;
+            margin: 0;
+            background-color: #46bcd4;
+            font-family: 'Lato', sans-serif;
+            font-size: 1em;
+            color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+.paginationfirstbtn {
+    padding: 0px 0px 0px 6px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-family: 'Lato', sans-serif;
+    font-size: 1.3em;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+}
+
+.paginationPRVbtn {
+    padding: 0px 0px 0px 9px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-family: 'Lato', sans-serif;
+    font-size: 1.3em;
+    color: #fff;
+    width: 25px;
+    /*height: 25px;*/
+    border-radius: 50px;
+}
+
+.paginationNXTbtn {
+    padding: 0px 0px 0px 10px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-family: 'Lato', sans-serif;
+    font-size: 1.3em;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+}
+/* single digit class */
+.paginationNUMbtn {
+    padding: 4px 0px 0px 8px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.0);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+/* single digit active class */
+.paginationNUM-ACTVbtn {
+    padding: 2px 0px 0px 8px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUM-ACTVbtnComp {
+    padding: 2px 0px 0px 8px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUM-ACTVbtnSub {
+    padding: 2px 0px 0px 8px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUM-ACTVbtnIntrvw {
+    padding: 2px 0px 0px 8px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUM-ACTVbtnAsst {
+    padding: 2px 0px 0px 8px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREbtn {
+    padding: 4px 0px 0px 8px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.0);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+/* two digit active class */
+.paginationNUMMOREtxt {
+    padding: 4px 0px 0px 4px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.0);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+/* three digit active class */
+.paginationNUMMOREtxt1 {
+    padding: 4px 0px 0px 4px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.0);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt-Active {
+    padding: 4px 0px 0px 5px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt-ActiveComp {
+    padding: 4px 0px 0px 5px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt-ActiveIntrw {
+    padding: 4px 0px 0px 5px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt-ActiveSub {
+    padding: 4px 0px 0px 5px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt-ActiveComp {
+    padding: 4px 0px 0px 5px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt1-Active {
+    padding: 4px 0px 0px 2px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt1-ActiveAsst {
+    padding: 4px 0px 0px 2px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt1-ActiveIntrw {
+    padding: 4px 0px 0px 2px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt1-ActiveSub {
+    padding: 4px 0px 0px 2px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+
+.paginationNUMMOREtxt1-ActiveAsst {
+    padding: 4px 0px 0px 2px;
+    margin: 0;
+    background-color: #f3c44e;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #14262e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    text-decoration: none;
+}
+/* Pagination ends here*/
+
+
+
+
