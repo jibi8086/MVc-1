@@ -234,7 +234,7 @@ in cshtml
 <script>
  var CurrentPageIdCompleted = 1;
     var CurrentPageId = 1;
-    var RowCount = 3;
+    var RowCount = 3;//hom many row want to display 
     var OffsetVal = 0;
     var ClassName = "";
     var OffsetVal = 0;
