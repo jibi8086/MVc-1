@@ -1,0 +1,4 @@
+<system.web>
+    <sessionState timeout="45" mode="InProc"/>
+    
+  </system.web>
