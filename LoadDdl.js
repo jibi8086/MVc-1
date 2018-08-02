@@ -77,3 +77,4 @@ for removing ddl
         }
         
         */
+//sql  SELECT ID_Task,TaskName from [VTwo].[TblTask];
